@@ -1,5 +1,5 @@
 # CS61A
-CS61A self learning
+CS61A self study
 
-### 本次测试
+### 如何进行本地测试?
 python3 ok --local
