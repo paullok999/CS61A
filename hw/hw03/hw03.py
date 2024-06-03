@@ -136,17 +136,16 @@ def count_coins(total):
     """
     "*** YOUR CODE HERE ***"
     # range of coin [1,5,10,25]
+    def recur(cur_coin,total):
+        # helper function
+        if(cur_coin == None):
+            return 0
+        if(total < 0):
+            return 0
+        if(total == 0):
+            return 1
+        return recur(next_larger_coin(cur_coin),total) + recur(cur_coin,total - cur_coin)
     return recur(1,total)
-
-def recur(cur_coin,total):
-    # helper function
-    if(cur_coin == None):
-        return 0
-    if(total < 0):
-        return 0
-    if(total == 0):
-        return 1
-    return recur(next_larger_coin(cur_coin),total) + recur(cur_coin,total - cur_coin)
 
 def print_move(origin, destination):
     """Print instructions to move a disk."""
