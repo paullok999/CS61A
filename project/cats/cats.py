@@ -193,7 +193,13 @@ def feline_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    def fix(i,j,n,m,limit):
+        if(i == n or j == m):
+            return abs(n - m)
+        if(limit < 0):
+            return 0
+        return fix(i + 1,j + 1,n,m,limit) if(typed[i] == source[j]) else 1 + fix(i + 1,j + 1,n,m,limit - 1)
+    return fix(0,0,len(typed),len(source),limit)
     # END PROBLEM 6
 
 
@@ -217,24 +223,36 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ___________: # Base cases should go here, you may add more base cases as needed.
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    # Recursive cases should go below here
-    if ___________: # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    else:
-        add = ... # Fill in these lines
-        remove = ...
-        substitute = ...
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-
+    # if ___________: # Base cases should go here, you may add more base cases as needed.
+    #     # BEGIN
+    #     "*** YOUR CODE HERE ***"
+    #     return 0
+    #     # END
+    # # Recursive cases should go below here
+    # if ___________: # Feel free to remove or add additional cases
+    #     # BEGIN
+    #     "*** YOUR CODE HERE ***"
+    #     # END
+    # else:
+    #     add = ... # Fill in these lines
+    #     remove = ...
+    #     substitute = ...
+    #     # BEGIN
+    #     "*** YOUR CODE HERE ***"
+    #     # END
+    if(limit < 0):
+        return 0
+    if(len(typed) == 0):
+        return len(source)
+    elif len(source) == 0:
+        return len(typed)
+    # s[1:] => use slice to remove the first element of s
+    if(typed[0] != source[0]):
+        add = minimum_mewtations(typed,source[1:],limit - 1) + 1
+        remove = minimum_mewtations(typed[1:],source,limit - 1) + 1
+        substitute = minimum_mewtations(typed[1:],source[1:],limit - 1) + 1
+        return min(add,remove,substitute)
+    return minimum_mewtations(typed[1:],source[1:],limit)
 
 def final_diff(typed, source, limit):
     """A diff function that takes in a string TYPED, a string SOURCE, and a number LIMIT.
