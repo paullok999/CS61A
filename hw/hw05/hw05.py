@@ -9,6 +9,15 @@ def hailstone(n):
     1
     """
     "*** YOUR CODE HERE ***"
+    assert n > 0
+    # add value to the end of generator
+    yield n
+    if n == 1:
+      # add the return value from the recursive call to the end of generator
+      yield from hailstone(1)
+    else:
+      yield from hailstone(n // 2 if(n % 2 == 0) else n * 3 + 1)
+        
 
 
 def merge(a, b):
@@ -24,6 +33,17 @@ def merge(a, b):
     [2, 3, 5, 7, 8, 9, 11, 13, 14, 15]
     """
     "*** YOUR CODE HERE ***"
+    def recur(x,y):
+      if x == y:
+        yield x
+        yield from recur(next(a),next(b))
+      elif x < y:
+        yield x
+        yield from recur(next(a),y)
+      else:
+        yield y
+        yield from recur(x,next(b))
+    return recur(next(a),next(b))
 
 
 def yield_paths(t, value):
