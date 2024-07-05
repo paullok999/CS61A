@@ -166,6 +166,9 @@ class ThrowerAnt(Ant):
     damage = 1
     # ADD/OVERRIDE CLASS ATTRIBUTES HERE
     food_cost = 3
+    # attack range:[lower_bound,upper_bound]
+    lower_bound = 0
+    upper_bound = float('inf')
 
     def nearest_bee(self):
         """Return the nearest Bee in a Place (that is not the hive) connected to
@@ -174,11 +177,13 @@ class ThrowerAnt(Ant):
         This method returns None if there is no such Bee (or none in range).
         """
         # BEGIN Problem 3 and 4
-        pos = self.place
+        pos,curr_place_num = self.place,0
+        is_in_range = curr_place_num >= self.lower_bound and curr_place_num <= self.upper_bound
         while(not pos is None):
-            if(not pos.is_hive and len(pos.bees) > 0):
+            if(is_in_range and not pos.is_hive and len(pos.bees) > 0):
                 return random_bee(pos.bees)
-            pos = pos.entrance
+            pos,curr_place_num = pos.entrance,curr_place_num + 1
+            is_in_range = curr_place_num >= self.lower_bound and curr_place_num <= self.upper_bound
         return None
         # END Problem 3 and 4
 
@@ -211,7 +216,8 @@ class ShortThrower(ThrowerAnt):
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 4
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
+    upper_bound = 3
     # END Problem 4
 
 
@@ -222,7 +228,8 @@ class LongThrower(ThrowerAnt):
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 4
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
+    lower_bound = 5
     # END Problem 4
 
 
@@ -234,7 +241,7 @@ class FireAnt(Ant):
     food_cost = 5
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 5
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 5
 
     def __init__(self, health=3):
@@ -250,14 +257,38 @@ class FireAnt(Ant):
         """
         # BEGIN Problem 5
         "*** YOUR CODE HERE ***"
+        # Use copy list to avoid not being able to go through all the bees
+        bees = self.place.bees.copy()
+        super().reduce_health(amount)
+        extra_damage = self.damage if(self.place is None) else 0
+        for bee in bees:
+            bee.reduce_health(amount + extra_damage)
         # END Problem 5
 
 # BEGIN Problem 6
 # The WallAnt class
+class WallAnt(Ant):
+    
+    name = 'Wall'
+    damage = 0
+    food_cost = 4
+    implemented = True
+    
+    def __init__(self,health = 4):
+        super().__init__(health)
+    
 # END Problem 6
 
 # BEGIN Problem 7
 # The HungryAnt Class
+class HungryAnt(Ant):
+    
+    name = 'Hungry'
+    food_cost = 4
+    implemented = True
+    
+    def __init__(self,health = 1):
+        super().__init__(health)
 # END Problem 7
 
 
