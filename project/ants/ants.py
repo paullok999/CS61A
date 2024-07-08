@@ -119,7 +119,13 @@ class Ant(Insect):
             place.ant = self
         else:
             # BEGIN Problem 8b
-            assert place.ant is None, 'Too many ants in {0}'.format(place)
+            if place.ant.is_container and place.ant.can_contain(self):
+                place.ant.store_ant(self)
+            elif self.is_container and self.can_contain(place.ant):
+                self.store_ant(place.ant)
+                place.ant = self
+            else:
+                assert place.ant is None, 'Too many ants in {0}'.format(place)
             # END Problem 8b
         Insect.add_to(self, place)
 
@@ -285,10 +291,23 @@ class HungryAnt(Ant):
     
     name = 'Hungry'
     food_cost = 4
+    chewing_turns = 3       #class attribute
     implemented = True
     
     def __init__(self,health = 1):
         super().__init__(health)
+        # instance attribute
+        self.turns_to_chew = 0
+        
+    def action(self, gamestate):
+        if self.turns_to_chew == 0:
+            bee = random_bee(self.place.bees)
+            if bee is not None:
+                bee.reduce_health(bee.health)
+                self.turns_to_chew = self.chewing_turns
+        else:
+            self.turns_to_chew -= 1
+            
 # END Problem 7
 
 
@@ -305,11 +324,14 @@ class ContainerAnt(Ant):
     def can_contain(self, other):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        return not other.is_container and self.ant_contained is None
         # END Problem 8a
 
     def store_ant(self, ant):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        if self.can_contain:
+            self.ant_contained = ant
         # END Problem 8a
 
     def remove_ant(self, ant):
@@ -330,6 +352,8 @@ class ContainerAnt(Ant):
     def action(self, gamestate):
         # BEGIN Problem 8a
         "*** YOUR CODE HERE ***"
+        if self.ant_contained is not None:
+            self.ant_contained.action(gamestate)
         # END Problem 8a
 
 
@@ -340,11 +364,31 @@ class BodyguardAnt(ContainerAnt):
     food_cost = 4
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 8c
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
+    
+    def __init__(self, health = 2):
+        super().__init__(health)
     # END Problem 8c
 
 # BEGIN Problem 9
 # The TankAnt class
+class TankAnt(ContainerAnt):
+    
+    name = 'Tank'
+    food_cost = 6
+    damage = 1
+    implemented = True
+    
+    
+    def __init__(self, health = 2):
+        super().__init__(health)
+    
+    def action(self, gamestate):
+        if self.ant_contained is not None:
+            self.ant_contained.action(gamestate)
+        bees = self.place.bees.copy()
+        for bee in bees:
+            bee.reduce_health(self.damage)
 # END Problem 9
 
 
