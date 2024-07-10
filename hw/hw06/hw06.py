@@ -1,4 +1,4 @@
-passphrase = '*** PASSPHRASE HERE ***'
+passphrase = 'G2AXpPoTc6BiZAQ4S2VafR+7tYoCQbE5PznOFg=='
 
 def midsem_survey(p):
     """
@@ -48,7 +48,39 @@ class VendingMachine:
     'Here is your soda.'
     """
     "*** YOUR CODE HERE ***"
-
+    stock = 0
+    balance = 0
+    
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+    
+    def vend(self):
+        if self.stock == 0:
+            return 'Nothing left to vend. Please restock.'
+        if self.balance == self.price:
+            self.balance = 0
+            self.stock -= 1
+            return f'Here is your {self.name}.'
+        elif self.balance > self.price:
+            balance = self.balance
+            self.balance = 0
+            self.stock -= 1
+            return f'Here is your {self.name} and ${balance - self.price} change.'
+        else:
+            return f'Please add ${self.price - self.balance} more funds.'
+    
+    def add_funds(self,funds):
+        if self.stock == 0:
+            return f'Nothing left to vend. Please restock. Here is your ${funds}.'
+        self.balance += funds
+        return f'Current balance: ${self.balance}'
+    
+    def restock(self,stock):
+        self.stock += stock
+        return f'Current {self.name} stock: {self.stock}'
+    
+    
 
 def store_digits(n):
     """Stores the digits of a positive number n in a linked list.
