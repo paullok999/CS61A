@@ -12,6 +12,12 @@ def cumulative_mul(t):
     Tree(5040, [Tree(60, [Tree(3), Tree(4), Tree(5)]), Tree(42, [Tree(7)])])
     """
     "*** YOUR CODE HERE ***"
+    def recur(t):
+        for b in t.branches:
+            t.label *= recur(b).label
+        return t
+    recur(t)
+    
 
 
 def prune_small(t, n):
@@ -31,11 +37,13 @@ def prune_small(t, n):
     >>> t3
     Tree(6, [Tree(1), Tree(3, [Tree(1), Tree(2)])])
     """
-    while ___________________________:
-        largest = max(_______________, key=____________________)
-        _________________________
-    for __ in _____________:
-        ___________________
+    while len(t.branches) > n:
+        # 选出所有分支中label最大的结点并删除
+        largest = max(t.branches, key= lambda node : node.label)
+        t.branches.remove(largest)
+    for b in t.branches:
+       # 递归处理所有子分支
+       prune_small(b,n)
 
 
 def delete(t, x):
