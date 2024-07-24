@@ -14,7 +14,7 @@ def calc_eval(exp):
     3
     """
     if isinstance(exp, Pair):
-        operator = exp.first # UPDATE THIS FOR Q2
+        operator = bindings[exp.first] if(exp.first in bindings) else exp.first # UPDATE THIS FOR Q2
         operands = exp.rest # UPDATE THIS FOR Q2
         if operator == 'and': # and expressions
             return eval_and(operands)
@@ -26,8 +26,8 @@ def calc_eval(exp):
         return OPERATORS[exp]
     elif isinstance(exp, int) or isinstance(exp, bool):   # Numbers and booleans
         return exp
-    elif _________________: # CHANGE THIS CONDITION FOR Q4
-        return _________________ # UPDATE THIS FOR Q4
+    elif isinstance(exp,str): # CHANGE THIS CONDITION FOR Q4
+        return bindings[exp] # UPDATE THIS FOR Q4
 
 def calc_apply(op, args):
     return op(args)
@@ -97,15 +97,15 @@ def eval_and(expressions):
     if isinstance(expressions,Pair):
         first = expressions.first
         rest = expressions.rest
-        if rest is nil:
+        if rest == nil:
             return eval_and(first)
         # 拆括号
         if isinstance(first,Pair):
             return eval_and(first) and eval_and(rest)
         elif first in OPERATORS:
             return OPERATORS[first](rest)
-        return first and eval_and(rest)
-    return expressions
+        return first if(first is scheme_f) else True and eval_and(rest)
+    return True if(expressions == nil) else expressions
     
 bindings = {}
 
@@ -125,6 +125,22 @@ def eval_define(expressions):
     2
     """
     "*** YOUR CODE HERE ***"
+    if isinstance(expressions,Pair):
+        name = expressions.first
+        val = expressions.rest
+        if val is nil:
+            return nil
+        elif isinstance(val,Pair):
+            first = val.first
+            if isinstance(first,str):
+                if first in bindings:
+                    bindings[name] = bindings[first]
+                else:
+                    bindings[name] = first
+            else:
+                bindings[name] = first
+        return name
+    return nil
 
 OPERATORS = { "//": floor_div, "+": addition, "-": subtraction, "*": multiplication, "/": division }
 
