@@ -14,14 +14,14 @@ def calc_eval(exp):
     3
     """
     if isinstance(exp, Pair):
-        operator = ____________ # UPDATE THIS FOR Q2
-        operands = ____________ # UPDATE THIS FOR Q2
+        operator = exp.first # UPDATE THIS FOR Q2
+        operands = exp.rest # UPDATE THIS FOR Q2
         if operator == 'and': # and expressions
             return eval_and(operands)
         elif operator == 'define': # define expressions
             return eval_define(operands)
         else: # Call expressions
-            return calc_apply(___________, ___________) # UPDATE THIS FOR Q2
+            return calc_apply(OPERATORS[operator], operands) # UPDATE THIS FOR Q2
     elif exp in OPERATORS:   # Looking up procedures
         return OPERATORS[exp]
     elif isinstance(exp, int) or isinstance(exp, bool):   # Numbers and booleans
@@ -52,6 +52,26 @@ def floor_div(args):
     20
     """
     "*** YOUR CODE HERE ***"
+    if isinstance(args,Pair):
+        first = args.first
+        # 优先处理括号内的表达式
+        if first in OPERATORS:
+            return OPERATORS[first](args.rest)
+        rest = args.rest
+        while rest is not nil:
+            # 从左到右顺序顺序运算
+            if isinstance(rest.first,int):
+                first //= rest.first
+                rest = rest.rest
+            elif isinstance(rest.first,Pair):
+                # 除去多余的括号
+                return first // floor_div(rest.first)
+            else:
+                # 优先处理括号内的表达式
+                return first // floor_div(rest)
+        return first
+    return 1
+            
 
 scheme_t = True   # Scheme's #t
 scheme_f = False  # Scheme's #f
@@ -74,7 +94,19 @@ def eval_and(expressions):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if isinstance(expressions,Pair):
+        first = expressions.first
+        rest = expressions.rest
+        if rest is nil:
+            return eval_and(first)
+        # 拆括号
+        if isinstance(first,Pair):
+            return eval_and(first) and eval_and(rest)
+        elif first in OPERATORS:
+            return OPERATORS[first](rest)
+        return first and eval_and(rest)
+    return expressions
+    
 bindings = {}
 
 def eval_define(expressions):
