@@ -34,7 +34,7 @@ class Frame:
         """Return the value bound to SYMBOL. Errors if SYMBOL is not found."""
         # BEGIN PROBLEM 1
         "*** YOUR CODE HERE ***"
-        def recur(curr_frame = self,symbol = symbol):
+        def recur(curr_frame,symbol):
             if symbol in curr_frame.bindings:
                 return curr_frame.bindings[symbol]
             elif curr_frame.parent is not None:
