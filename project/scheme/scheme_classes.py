@@ -27,14 +27,23 @@ class Frame:
         """Define Scheme SYMBOL to have VALUE."""
         # BEGIN PROBLEM 1
         "*** YOUR CODE HERE ***"
+        self.bindings[symbol] = value
         # END PROBLEM 1
 
     def lookup(self, symbol):
         """Return the value bound to SYMBOL. Errors if SYMBOL is not found."""
         # BEGIN PROBLEM 1
         "*** YOUR CODE HERE ***"
+        def recur(curr_frame = self,symbol = symbol):
+            if symbol in curr_frame.bindings:
+                return curr_frame.bindings[symbol]
+            elif curr_frame.parent is not None:
+                # 有parent就递归查找
+                return recur(curr_frame.parent,symbol)
+            raise SchemeError('KeyError: {0}'.format(symbol))
+        return recur(self,symbol)
         # END PROBLEM 1
-        raise SchemeError('unknown identifier: {0}'.format(symbol))
+        # raise SchemeError('unknown identifier: {0}'.format(symbol))
 
 
     def make_child_frame(self, formals, vals):

@@ -45,10 +45,20 @@ def scheme_apply(procedure, args, env):
     if isinstance(procedure, BuiltinProcedure):
         # BEGIN PROBLEM 2
         "*** YOUR CODE HERE ***"
+        arguments = []
+        curr = args
+        # 构建方法参数列表
+        while curr is not nil:
+            arguments.append(curr.first)
+            curr = curr.rest
+        if procedure.need_env:
+            arguments.append(env)
         # END PROBLEM 2
         try:
             # BEGIN PROBLEM 2
             "*** YOUR CODE HERE ***"
+            # procedure.py_func(*arguments) == procedure.py_func([arguments[0],...,[arguments[n - 1]])
+            return procedure.py_func(*arguments)
             # END PROBLEM 2
         except TypeError as err:
             raise SchemeError('incorrect number of arguments: {0}'.format(procedure))
