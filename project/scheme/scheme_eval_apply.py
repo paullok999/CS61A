@@ -24,7 +24,6 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
         return env.lookup(expr)
     elif self_evaluating(expr):
         return expr
-
     # All non-atomic expressions are lists (combinations)
     if not scheme_listp(expr):
         raise SchemeError('malformed list: {0}'.format(repl_str(expr)))
@@ -34,6 +33,13 @@ def scheme_eval(expr, env, _=None): # Optional third argument is ignored
     else:
         # BEGIN PROBLEM 3
         "*** YOUR CODE HERE ***"
+        # 取出当前frame中的对应的Procedure
+        operator = scheme_eval(first,env)
+        validate_procedure(operator)
+        # 使用map依次计算rest中每一项子表达式
+        operands = rest.map(lambda operand: scheme_eval(operand,env))
+        # 调研scheme_apply完成本表达式的计算
+        return scheme_apply(operator,operands,env)
         # END PROBLEM 3
 
 def scheme_apply(procedure, args, env):
