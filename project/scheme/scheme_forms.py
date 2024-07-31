@@ -130,6 +130,17 @@ def do_and_form(expressions, env):
     """
     # BEGIN PROBLEM 12
     "*** YOUR CODE HERE ***"
+    if expressions is nil:
+        return True
+    val,curr = True,expressions
+    # 从左到右计算子表达式
+    while curr is not nil:
+        val = scheme_eval(curr.first,env)
+        # 只要有一个子表达式是#f,则立刻返回#f(模拟逻辑运算符and的短路)
+        if is_scheme_false(val):
+            return False
+        curr = curr.rest
+    return val
     # END PROBLEM 12
 
 def do_or_form(expressions, env):
@@ -148,6 +159,17 @@ def do_or_form(expressions, env):
     """
     # BEGIN PROBLEM 12
     "*** YOUR CODE HERE ***"
+    if expressions is nil:
+        return False
+    val,curr = False,expressions
+    # 从左到右计算子表达式
+    while curr is not nil:
+        val = scheme_eval(curr.first,env)
+        # 只要有一个子表达式是#t,则返回立刻返回这个子表达式的值(模拟逻辑运算符or的短路)
+        if is_scheme_true(val):
+            return val
+        curr = curr.rest
+    return val
     # END PROBLEM 12
 
 def do_cond_form(expressions, env):
