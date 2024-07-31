@@ -44,6 +44,14 @@ def do_define_form(expressions, env):
         # defining a named procedure e.g. (define (f x y) (+ x y))
         # BEGIN PROBLEM 10
         "*** YOUR CODE HERE ***"
+        formals = expressions.first.rest
+        body = expressions.rest
+        # 构造lambda表达式
+        procedure = do_lambda_form(Pair(formals,body),env)
+        key = signature.first
+        # 将方法名与lambda表达式绑定在一起
+        env.define(key,procedure)
+        return key
         # END PROBLEM 10
     else:
         bad_signature = signature.first if isinstance(signature, Pair) else signature
@@ -86,8 +94,9 @@ def do_lambda_form(expressions, env):
     validate_formals(formals)
     # BEGIN PROBLEM 7
     "*** YOUR CODE HERE ***"
-    body = expressions.rest
-    return LambdaProcedure(formals,body,env)
+    # expression.first:lambda函数参数列表
+    # expression.rest:lambda函数体
+    return LambdaProcedure(formals,expressions.rest,env)
     # END PROBLEM 7
 
 def do_if_form(expressions, env):
@@ -225,6 +234,7 @@ def do_mu_form(expressions, env):
     validate_formals(formals)
     # BEGIN PROBLEM 11
     "*** YOUR CODE HERE ***"
+    return MuProcedure(formals,expressions.rest)
     # END PROBLEM 11
 
 

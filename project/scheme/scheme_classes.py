@@ -62,6 +62,7 @@ class Frame:
         # BEGIN PROBLEM 8
         "*** YOUR CODE HERE ***"
         child_frame = Frame(self)
+        # 将参数名与其对应的实际值一一绑定
         while formals is not nil:
             child_frame.define(formals.first,vals.first)
             formals = formals.rest
