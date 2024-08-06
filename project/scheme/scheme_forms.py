@@ -190,6 +190,10 @@ def do_cond_form(expressions, env):
         if is_scheme_true(test):
             # BEGIN PROBLEM 13
             "*** YOUR CODE HERE ***"
+            # no corresponding result
+            if clause.rest is nil:
+                return test
+            return eval_all(clause.rest,env)
             # END PROBLEM 13
         expressions = expressions.rest
 
@@ -214,6 +218,15 @@ def make_let_frame(bindings, env):
     names = vals = nil
     # BEGIN PROBLEM 14
     "*** YOUR CODE HERE ***"
+    while bindings is not nil:
+        binding = bindings.first
+        # 校验当前的binding语句是否合法
+        validate_form(binding,2,2)
+        names = Pair(binding.first,names)
+        vals = Pair(scheme_eval(binding.rest.first,env),vals)
+        bindings = bindings.rest
+    # 校验参数名列表是否合法
+    validate_formals(names)
     # END PROBLEM 14
     return env.make_child_frame(names, vals)
 
